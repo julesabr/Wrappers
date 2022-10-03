@@ -5,10 +5,19 @@ using System.Reflection;
 using JetBrains.Annotations;
 
 namespace NaughtyBiker.Wrappers {
+    /// <summary>Implementation of <see cref="NaughtyBiker.Wrappers.IReflectionAssemblies" />.</summary>
+    /// <typeparam name="TEntryPoint">Type used to get the startup assembly for solution. The startup assembly
+    /// will reference either directly or indirectly all other assemblies in solution and typically is the assembly
+    /// with the Main method. The type can be any type as long as it is defined in the startup assembly.</typeparam>
     [PublicAPI]
     public class ReflectionAssemblies<TEntryPoint> : IReflectionAssemblies {
         private readonly IEnumerable<Assembly> assemblies;
 
+        /// <summary>
+        /// Initializes a new instance of <see cref="T:NaughtyBiker.Wrappers.ReflectionAssemblies`1" /> that uses
+        /// reflection to collect all assemblies in solution and initializes
+        /// <see cref="T:NaughtyBiker.Wrappers.ReflectionAssemblies`1.ReflectionTypes" />.
+        /// </summary>
         public ReflectionAssemblies() {
             assemblies = GetAllAssemblies();
             Types = new ReflectionTypes(assemblies);
@@ -37,10 +46,19 @@ namespace NaughtyBiker.Wrappers {
             } while (next.Count > 0);
         }
 
+        /// <summary>
+        /// Implementation of <see cref="NaughtyBiker.Wrappers.IReflectionAssemblies.IReflectionTypes" />.
+        /// </summary>
         [PublicAPI]
         public class ReflectionTypes : IReflectionAssemblies.IReflectionTypes {
             private readonly IEnumerable<Type> types;
 
+            /// <summary>
+            /// Initializes a new instance of
+            /// <see cref="T:NaughtyBiker.Wrappers.ReflectionAssemblies`1.ReflectionTypes" /> that uses reflection to
+            /// collect all types in all given assemblies.
+            /// </summary>
+            /// <param name="assemblies">List of assemblies to collect types from</param>
             public ReflectionTypes(IEnumerable<Assembly> assemblies) {
                 types = assemblies.SelectMany(assembly => assembly.GetTypes());
             }
@@ -53,28 +71,47 @@ namespace NaughtyBiker.Wrappers {
                 return types.FirstOrDefault(type => type.Name == name);
             }
 
-            public IEnumerable<Type> From<T>() where T : class {
-                return From(typeof(T));
+            public IEnumerable<Type> AssignableTo<T>(bool abstracts = false, bool interfaces = false) where T : class {
+                return AssignableTo(typeof(T), abstracts, interfaces);
             }
 
-            public IEnumerable<Type> From(Type type) {
-                return types.Where(t => type.IsAssignableFrom(t) && !t.IsInterface && !t.IsAbstract);
-            }
-
-            public IEnumerable<Type> ImplementsGeneric(Type type, Predicate<Type> predicate = null) {
-                return types.Where(t =>
-                    t.GetInterfaces().Any(i => i.IsGenericType && i.GetGenericTypeDefinition() == type)
-                    && (predicate == null || predicate!(t))
+            public IEnumerable<Type> AssignableTo(Type type, bool abstracts = false, bool interfaces = false) {
+                return types.Where(t => 
+                    type.IsAssignableFrom(t)
+                    && (abstracts || !t.IsAbstract)
+                    && (interfaces || !t.IsInterface)
                 );
             }
 
-            public IEnumerable<Type> HaveAttribute<T>() where T : Attribute {
-                return types.Where(type => type.GetCustomAttributes(typeof(T), true).Length > 0);
+            public IEnumerable<Type> ImplementsGeneric(Type type, bool abstracts = false, bool interfaces = false) {
+                return types.Where(t =>
+                    t.GetInterfaces().Any(i => i.IsGenericType && i.GetGenericTypeDefinition() == type)
+                    && (abstracts || !t.IsAbstract)
+                    && (interfaces || !t.IsInterface)
+                );
+            }
+
+            public IEnumerable<Type> HaveAttribute<T>(bool inherit = true, bool abstracts = false, bool interfaces = false) where T : Attribute {
+                return HaveAttribute(typeof(T), inherit, abstracts, interfaces);
+            }
+
+            public IEnumerable<Type> HaveAttribute(Type type, bool inherit = true,  bool abstracts = false, bool interfaces = false) {
+                return types.Where(t => 
+                    t.GetCustomAttributes(type, inherit).Length > 0
+                    && (abstracts || !t.IsAbstract)
+                    && (interfaces || !t.IsInterface)
+                );
             }
 
             public IEnumerable<T> InstanceOf<T>() where T : class {
-                return From<T>()
+                return AssignableTo<T>()
                     .Select(type => Activator.CreateInstance(type) as T)
+                    .ToList();
+            }
+
+            public IEnumerable<object> InstanceOf(Type type) {
+                return AssignableTo(type)
+                    .Select(Activator.CreateInstance)
                     .ToList();
             }
         }

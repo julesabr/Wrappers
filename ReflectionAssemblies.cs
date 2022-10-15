@@ -23,8 +23,10 @@ namespace NaughtyBiker.Wrappers {
             Types = new ReflectionTypes(assemblies);
         }
 
+        /// <inheritdoc />
         public IReflectionAssemblies.IReflectionTypes Types { get; }
 
+        /// <inheritdoc />
         public IEnumerable<Assembly> Get() {
             return assemblies;
         }
@@ -63,18 +65,22 @@ namespace NaughtyBiker.Wrappers {
                 types = assemblies.SelectMany(assembly => assembly.GetTypes());
             }
 
+            /// <inheritdoc />
             public IEnumerable<Type> All() {
                 return types;
             }
 
+            /// <inheritdoc />
             public Type WithName(string name) {
                 return types.FirstOrDefault(type => type.Name == name);
             }
 
+            /// <inheritdoc />
             public IEnumerable<Type> AssignableTo<T>(bool abstracts = false, bool interfaces = false) where T : class {
                 return AssignableTo(typeof(T), abstracts, interfaces);
             }
 
+            /// <inheritdoc />
             public IEnumerable<Type> AssignableTo(Type type, bool abstracts = false, bool interfaces = false) {
                 return types.Where(t => 
                     type.IsAssignableFrom(t)
@@ -83,6 +89,7 @@ namespace NaughtyBiker.Wrappers {
                 );
             }
 
+            /// <inheritdoc />
             public IEnumerable<Type> ImplementsGeneric(Type type, bool abstracts = false, bool interfaces = false) {
                 return types.Where(t =>
                     t.GetInterfaces().Any(i => i.IsGenericType && i.GetGenericTypeDefinition() == type)
@@ -91,10 +98,12 @@ namespace NaughtyBiker.Wrappers {
                 );
             }
 
+            /// <inheritdoc />
             public IEnumerable<Type> HaveAttribute<T>(bool inherit = true, bool abstracts = false, bool interfaces = false) where T : Attribute {
                 return HaveAttribute(typeof(T), inherit, abstracts, interfaces);
             }
 
+            /// <inheritdoc />
             public IEnumerable<Type> HaveAttribute(Type type, bool inherit = true,  bool abstracts = false, bool interfaces = false) {
                 return types.Where(t => 
                     t.GetCustomAttributes(type, inherit).Length > 0
@@ -103,12 +112,14 @@ namespace NaughtyBiker.Wrappers {
                 );
             }
 
+            /// <inheritdoc />
             public IEnumerable<T> InstanceOf<T>() where T : class {
                 return AssignableTo<T>()
                     .Select(type => Activator.CreateInstance(type) as T)
                     .ToList();
             }
 
+            /// <inheritdoc />
             public IEnumerable<object> InstanceOf(Type type) {
                 return AssignableTo(type)
                     .Select(Activator.CreateInstance)

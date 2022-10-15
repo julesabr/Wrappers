@@ -1,0 +1,60 @@
+/* Color schemes */
+:root 
+{
+    /* General */
+    --main-bg-color: #fff;
+    --footer-bg-color: rgba(0, 0, 0, 0.1);
+    --table-strip-bg-color: #eaeaec;
+    --table-header-bg-color: #f2f2f4;
+    --table-header-color: hsla(0,0%,0%,.8);
+    --table-header-border-color: #efeff1;
+
+    /* Text */
+    --text-color: #0b0b0b;
+    --link-color: #00b0f4;
+    --link-hover-color: #007a9f;
+    --link-active-color: #000;
+    --link-active-bg-color: #a8b2ff;
+    --h3-color: #000;
+    --h4-color: #000;
+    --h5-color: #000;
+    
+    /* Topbar */
+    --topbar-bg-color: #d7d7dc;
+    
+    /* Button */
+    --button-color: #747f8d;
+
+    /* Sidebar */
+    --separator-color: #c4c7cc;
+    --sidebar-bg-color: #f5f5f6;
+    --sidebar-item-color: #979797;
+    --sidebar-item-2nd-color: hsla(0,0%,0%,.35);
+    --sidebar-item-3rd-color: hsla(0,0%,0%,.25);
+
+    /* Scrollbar */
+    --scrollbar-bg-color: transparent;
+    --scrollbar-thumb-bg-color: rgba(0,0,0,.4);
+    --scrollbar-thumb-border-color: transparent;
+
+    /* Alerts and Blocks */
+    --alert-info-border-color: rgba(114,137,218,.8);
+    --alert-info-bg-color: rgba(114,137,218,.1);
+
+    --alert-warning-border-color: rgba(250,166,26,.8);
+    --alert-warning-bg-color: rgba(250,166,26,.1);
+
+    --alert-danger-border-color: rgba(240,71,71,.8);
+    --alert-danger-bg-color: rgba(240,71,71,.1);
+
+    --alert-tip-border-color: rgba(0,0,0,.8);
+    --alert-tip-bg-color: rgba(0,0,0,.1);
+
+    --blockquote-border-color: rgba(0,0,0,.5);
+    --blockquote-bg-color: rgba(0,0,0,.1);
+
+    --breadcrumb-bg-color: #f5f5f6;
+
+    /* Code Higlighting */
+    --code-bg-color: #ededef;
+}

@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Reflection;
 using JetBrains.Annotations;
 
-namespace NaughtyBiker.Wrappers {
+namespace Julesabr.Wrappers {
     /// <summary>
     /// Accesses the .NET Reflection API on all referenced assemblies in solution.
     /// </summary>
     [PublicAPI]
     public interface IReflectionAssemblies {
-        /// <returns>Instance of <see cref="NaughtyBiker.Wrappers.IReflectionAssemblies.IReflectionTypes" />
+        /// <returns>Instance of <see cref="IReflectionTypes" />
         /// containing all types in all referenced assemblies in solution</returns>
         IReflectionTypes Types { get; }
         

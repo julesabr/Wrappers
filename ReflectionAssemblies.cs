@@ -4,8 +4,8 @@ using System.Linq;
 using System.Reflection;
 using JetBrains.Annotations;
 
-namespace NaughtyBiker.Wrappers {
-    /// <summary>Implementation of <see cref="NaughtyBiker.Wrappers.IReflectionAssemblies" />.</summary>
+namespace Julesabr.Wrappers {
+    /// <summary>Implementation of <see cref="IReflectionAssemblies" />.</summary>
     /// <typeparam name="TEntryPoint">Type used to get the startup assembly for solution. The startup assembly
     /// will reference either directly or indirectly all other assemblies in solution and typically is the assembly
     /// with the Main method. The type can be any type as long as it is defined in the startup assembly.</typeparam>
@@ -14,9 +14,9 @@ namespace NaughtyBiker.Wrappers {
         private readonly IEnumerable<Assembly> assemblies;
 
         /// <summary>
-        /// Initializes a new instance of <see cref="T:NaughtyBiker.Wrappers.ReflectionAssemblies`1" /> that uses
+        /// Initializes a new instance of <see cref="T:Julesabr.Wrappers.ReflectionAssemblies`1" /> that uses
         /// reflection to collect all assemblies in solution and initializes
-        /// <see cref="T:NaughtyBiker.Wrappers.ReflectionAssemblies`1.ReflectionTypes" />.
+        /// <see cref="T:Julesabr.Wrappers.ReflectionAssemblies`1.ReflectionTypes" />.
         /// </summary>
         public ReflectionAssemblies() {
             assemblies = GetAllAssemblies();
@@ -49,7 +49,7 @@ namespace NaughtyBiker.Wrappers {
         }
 
         /// <summary>
-        /// Implementation of <see cref="NaughtyBiker.Wrappers.IReflectionAssemblies.IReflectionTypes" />.
+        /// Implementation of <see cref="IReflectionAssemblies.IReflectionTypes" />.
         /// </summary>
         [PublicAPI]
         public class ReflectionTypes : IReflectionAssemblies.IReflectionTypes {
@@ -57,7 +57,7 @@ namespace NaughtyBiker.Wrappers {
 
             /// <summary>
             /// Initializes a new instance of
-            /// <see cref="T:NaughtyBiker.Wrappers.ReflectionAssemblies`1.ReflectionTypes" /> that uses reflection to
+            /// <see cref="T:Julesabr.Wrappers.ReflectionAssemblies`1.ReflectionTypes" /> that uses reflection to
             /// collect all types in all given assemblies.
             /// </summary>
             /// <param name="assemblies">List of assemblies to collect types from</param>

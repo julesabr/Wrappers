@@ -10,8 +10,11 @@
   {{#_description}}<meta name="description" content="{{_description}}">{{/_description}}
   <link rel="shortcut icon" href="{{_rel}}{{{_appFaviconPath}}}{{^_appFaviconPath}}favicon.ico{{/_appFaviconPath}}">
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
-  <link id="code-theme" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/night-owl.min.css">
-  <link id="theme" rel="stylesheet" href="{{_rel}}styles/colors-dark.css">
+  <link class="hidden" id="colors-dark" rel="stylesheet" href="{{_rel}}styles/colors-dark.css">
+  <link class="hidden" id="colors-light" rel="stylesheet" href="{{_rel}}styles/colors-light.css">
+  <link class="hidden" id="code-dark" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/night-owl.min.css">
+  <link class="hidden" id="code-light" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/styles/base16/github.min.css">
+  <script type="text/javascript" src="{{_rel}}styles/init-theme.js"></script>
   <link rel="stylesheet" href="{{_rel}}styles/discord.css">
   <link rel="stylesheet" href="{{_rel}}styles/main.css">
   <meta property="docfx:navrel" content="{{_navRel}}">

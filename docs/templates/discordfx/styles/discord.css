@@ -27,6 +27,10 @@
     outline-color: var(--link-active-bg-color);
 }
 
+.hidden {
+    display: none !important;
+}
+
 /* Sliders */
 .moon {
     padding-bottom: 5px;

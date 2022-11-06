@@ -1,5 +1,5 @@
 version: 2.1
-#Test
+
 orbs:
   dotnet: julesabr/dotnet@dev:first
 
@@ -9,3 +9,4 @@ workflows:
       - dotnet/pack:
           display-name: Julesabr.Wrappers
           project-file: Julesabr.Wrappers.csproj
+          nuspec-file: Julesabr.Wrappers.nuspec

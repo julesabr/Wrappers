@@ -21,6 +21,8 @@ workflows:
       - dotnet/pack:
           lib-name: Julesabr.Wrappers
           project-file: Julesabr.Wrappers.csproj
+          requires:
+            - initialize/checkout
       - list-output:
           requires:
             - dotnet/pack

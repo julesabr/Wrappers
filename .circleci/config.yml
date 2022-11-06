@@ -8,10 +8,9 @@ jobs:
     docker:
       - image: alpine:3.16
     steps:
-      - checkout
       - attach_workspace:
           at: bin
-      - run: ls -l bin
+      - run: ls -l bin/Julesabr.Wrappers
 
 workflows:
   main: 

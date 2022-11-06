@@ -1,17 +1,11 @@
 version: 2.1
 
-jobs:
-  build:
-    docker:
-      - image: mcr.microsoft.com/dotnet/sdk:5.0-bullseye-slim
-    steps:
-      - checkout
-      - run:
-          name: Run pack
-          command: |
-            dotnet pack Julesabr.Wrappers.csproj -p:Version=1.0 --configuration Debug --output bin
+orbs:
+  dotnet: julesabr/dotnet@dev:first
 
 workflows:
-  ci: 
+  main: 
     jobs:
-      - build
+      - dotnet/pack:
+          display-name: Julesabr.Wrappers
+          project-file: Julesabr.Wrappers.csproj

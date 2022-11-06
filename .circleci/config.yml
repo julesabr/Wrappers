@@ -17,4 +17,6 @@ workflows:
       - dotnet/pack:
           display-name: Julesabr.Wrappers
           project-file: Julesabr.Wrappers.csproj
-      - list-output
+      - list-output:
+          requires:
+            - dotnet/pack

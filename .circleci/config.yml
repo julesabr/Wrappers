@@ -9,4 +9,3 @@ workflows:
       - dotnet/pack:
           display-name: Julesabr.Wrappers
           project-file: Julesabr.Wrappers.csproj
-          nuspec-file: Julesabr.Wrappers.nuspec

@@ -9,13 +9,15 @@ jobs:
       - image: alpine:3.16
     steps:
       - checkout
+      - attach_workspace:
+          at: bin
       - run: ls -l bin
 
 workflows:
   main: 
     jobs:
       - dotnet/pack:
-          display-name: Julesabr.Wrappers
+          lib-name: Julesabr.Wrappers
           project-file: Julesabr.Wrappers.csproj
       - list-output:
           requires:

@@ -12,17 +12,26 @@ jobs:
     steps:
       - attach_workspace:
           at: .
-      - run: ls -l bin/Julesabr.Wrappers
+      - run: ls -l bin
+      - run: ls -l bin/dotnet/build
+      - run: ls -l bin/dotnet/build/Julesabr.Wrappers
+      - run: ls -l bin/dotnet/test
+      - run: ls -l bin/dotnet/test/Coverage
 
 workflows:
   main: 
     jobs:
       - initialize/checkout
+      - dotnet/test:
+          project-file: Julesabr.Wrappers.csproj
+          collect-coverage: yes
+          requires:
+            - initialize/checkout
       - dotnet/pack:
           lib-name: Julesabr.Wrappers
           project-file: Julesabr.Wrappers.csproj
           requires:
-            - initialize/checkout
+            - dotnet/test
       - list-output:
           requires:
             - dotnet/pack

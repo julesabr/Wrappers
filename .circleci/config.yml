@@ -14,7 +14,6 @@ jobs:
           at: .
       - run: ls -l bin
       - run: ls -l bin/dotnet/pack
-      - run: ls -l bin/dotnet/pack/Julesabr.Wrappers
 
 workflows:
   main: 

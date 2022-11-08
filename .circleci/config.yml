@@ -1,5 +1,5 @@
 version: 2.1
-# Test 1
+
 orbs:
   initialize: julesabr/initialize@dev:first
   dotnet:     julesabr/dotnet@dev:first
@@ -13,8 +13,6 @@ jobs:
       - attach_workspace:
           at: .
       - run: ls -l bin
-      - run: ls -l bin/dotnet/test
-      - run: ls -l bin/dotnet/test/Coverage
       - run: ls -l bin/dotnet/pack
       - run: ls -l bin/dotnet/pack/Julesabr.Wrappers
 
@@ -24,7 +22,6 @@ workflows:
       - initialize/checkout
       - dotnet/test:
           project-file: Julesabr.Wrappers.csproj
-          collect-coverage: yes
           requires:
             - initialize/checkout
       - dotnet/pack:

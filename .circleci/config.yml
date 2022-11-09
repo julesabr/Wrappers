@@ -67,8 +67,8 @@ workflows:
   feature:
     when:
       or:
-        - matches: { pattern: "^feature.*$", value: "" }
-        - matches: { pattern: "^hotfix.*$", value: "" }
+        - matches: { pattern: "^feature.*$", value: "<< pipeline.git.branch >>" }
+        - matches: { pattern: "^hotfix.*$", value: "<< pipeline.git.branch >>" }
     jobs:
       - initialize/checkout
       - dotnet/test:

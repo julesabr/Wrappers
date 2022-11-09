@@ -3,6 +3,7 @@ version: 2.1
 orbs:
   initialize: julesabr/initialize@dev:first
   dotnet:     julesabr/dotnet@dev:first
+  autoversion:  julesabr/autoversion@dev:first
   
 jobs:
   list-output:
@@ -16,7 +17,58 @@ jobs:
       - run: ls -l bin/dotnet/pack
 
 workflows:
-  main: 
+  main:
+    when:
+      equal: [ << pipeline.git.branch >>, main ]
+    jobs:
+      - initialize/checkout
+      - autoversion/init:
+          release-branch: main
+          requires:
+            - initialize/checkout
+      - dotnet/test:
+          project-file: Julesabr.Wrappers.csproj
+          requires:
+            - initialize/checkout
+      - dotnet/pack:
+          lib-name: Julesabr.Wrappers
+          version-file: version
+          project-file: Julesabr.Wrappers.csproj
+          requires:
+            - autoversion/init
+            - dotnet/test
+      - list-output:
+          requires:
+            - dotnet/pack
+  develop:
+    when:
+      equal: [ << pipeline.git.branch >>, develop ]
+    jobs:
+      - initialize/checkout
+      - autoversion/init:
+          release-branch: main
+          prerelease-branch: develop
+          asset-path: bin/dotnet/pack
+          requires:
+            - initialize/checkout
+      - dotnet/test:
+          project-file: Julesabr.Wrappers.csproj
+          requires:
+            - initialize/checkout
+      - dotnet/pack:
+          lib-name: Julesabr.Wrappers
+          project-file: Julesabr.Wrappers.csproj
+          requires:
+            - autoversion/init
+            - dotnet/test
+      - list-output:
+          requires:
+            - dotnet/pack
+  feature:
+    when:
+      or:
+        - matches: { pattern: "^feature.*$", value: "" }
+        - matches: { pattern: "^hotfix.*$", value: "" }
     jobs:
       - initialize/checkout
       - dotnet/test:

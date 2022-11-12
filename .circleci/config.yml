@@ -13,7 +13,8 @@ workflows:
         - equal: [ << pipeline.git.branch >>, main ]
         - equal: [ << pipeline.git.branch >>, develop ]
     jobs:
-      - initialize/checkout
+      - initialize/checkout:
+          repository-url: https://github.com/julesabr/Wrappers.git
       - autoversion/init:
           release-branch: main
           prerelease-branch: develop
@@ -44,7 +45,8 @@ workflows:
         - matches: { pattern: "^feature.*$", value: "<< pipeline.git.branch >>" }
         - matches: { pattern: "^hotfix.*$", value: "<< pipeline.git.branch >>" }
     jobs:
-      - initialize/checkout
+      - initialize/checkout:
+          repository-url: https://github.com/julesabr/Wrappers.git
       - dotnet/test:
           project-file: Julesabr.Wrappers.csproj
           requires:

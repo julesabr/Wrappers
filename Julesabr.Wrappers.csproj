@@ -3,6 +3,14 @@
     <PropertyGroup>
         <TargetFramework>netstandard2.0</TargetFramework>
         <LangVersion>8.0</LangVersion>
+        <Authors>julesabr</Authors>
+        <Description>Shared classes and interfaces that wrap other libraries and APIs</Description>
+        <PackageIcon>julesabr.png</PackageIcon>
+        <PackageProjectUrl>https://wrappers.julesabr.dev</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/julesabr/Wrappers.git</RepositoryUrl>
+        <PackageTags>wrapper;wrappers;reflection;julesabr</PackageTags>
+        <Copyright>Copyright (c) 2022 Julian Sangillo</Copyright>
+        <PackageLicenseFile>LICENSE</PackageLicenseFile>
     </PropertyGroup>
 
     <ItemGroup>
@@ -10,7 +18,8 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="docs\templates" />
+        <None Include="julesabr.png" Pack="true" PackagePath="" />
+        <None Include="LICENSE" Pack="true" PackagePath="" />
     </ItemGroup>
 
 </Project>

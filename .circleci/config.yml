@@ -4,7 +4,7 @@ orbs:
   initialize:   julesabr/initialize@dev:1
   dotnet:       julesabr/dotnet@dev:1
   nuget:        julesabr/nuget@dev:1
-  autoversion:  julesabr/autoversion@dev:1
+  autoversion:  julesabr/autoversion@dev:2
 
 workflows:
   main:

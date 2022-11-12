@@ -1,20 +1,10 @@
 version: 2.1
 
 orbs:
-  initialize: julesabr/initialize@dev:first
-  dotnet:     julesabr/dotnet@dev:first
-  autoversion:  julesabr/autoversion@dev:first
-  
-jobs:
-  list-output:
-    docker:
-      - image: alpine:3.16
-    working_directory: workspace
-    steps:
-      - attach_workspace:
-          at: .
-      - run: ls -l bin
-      - run: ls -l bin/dotnet/pack
+  initialize:   julesabr/initialize@dev:1
+  dotnet:       julesabr/dotnet@dev:1
+  nuget:        julesabr/nuget@dev:1
+  autoversion:  julesabr/autoversion@dev:1
 
 workflows:
   main:
@@ -37,9 +27,14 @@ workflows:
           requires:
             - autoversion/init
             - dotnet/test
-      - list-output:
+      - nuget/deploy:
+          pkg-file: bin/dotnet/pack/*.nupkg
+          api-key: $NUGET_KEY
           requires:
             - dotnet/pack
+      - autoversion/publish:
+          requires:
+            - nuget/deploy
   develop:
     when:
       equal: [ << pipeline.git.branch >>, develop ]
@@ -57,13 +52,19 @@ workflows:
             - initialize/checkout
       - dotnet/pack:
           lib-name: Julesabr.Wrappers
+          version-file: version
           project-file: Julesabr.Wrappers.csproj
           requires:
             - autoversion/init
             - dotnet/test
-      - list-output:
+      - nuget/deploy:
+          pkg-file: bin/dotnet/pack/*.nupkg
+          api-key: $NUGET_KEY
           requires:
             - dotnet/pack
+      - autoversion/publish:
+          requires:
+            - nuget/deploy
   feature:
     when:
       or:
@@ -80,6 +81,3 @@ workflows:
           project-file: Julesabr.Wrappers.csproj
           requires:
             - dotnet/test
-      - list-output:
-          requires:
-            - dotnet/pack

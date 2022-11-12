@@ -9,9 +9,40 @@ orbs:
 workflows:
   main:
     when:
-      or:
-        - equal: [ << pipeline.git.branch >>, main ]
-        - equal: [ << pipeline.git.branch >>, develop ]
+      equal: [ << pipeline.git.branch >>, main ]
+    jobs:
+      - initialize/checkout:
+          repository-url: https://github.com/julesabr/Wrappers.git
+      - autoversion/init:
+          release-branch: main
+          requires:
+            - initialize/checkout
+      - dotnet/test:
+          project-file: Julesabr.Wrappers.csproj
+          requires:
+            - initialize/checkout
+      - dotnet/pack:
+          lib-name: Julesabr.Wrappers
+          version-file: version
+          project-file: Julesabr.Wrappers.csproj
+          requires:
+            - autoversion/init
+            - dotnet/test
+      - approve-deploy:
+          type: approval
+          requires:
+            - dotnet/pack
+      - nuget/deploy:
+          pkg-file: bin/dotnet/pack/*.nupkg
+          api-key: $NUGET_KEY
+          requires:
+            - approve-deploy
+      - autoversion/publish:
+          requires:
+            - nuget/deploy
+  develop:
+    when:
+      equal: [ << pipeline.git.branch >>, develop ]
     jobs:
       - initialize/checkout:
           repository-url: https://github.com/julesabr/Wrappers.git

@@ -1,10 +1,12 @@
 version: 2.1
 
 orbs:
-  initialize:   julesabr/initialize@dev:3
-  dotnet:       julesabr/dotnet@dev:1
-  nuget:        julesabr/nuget@dev:1
-  autoversion:  julesabr/autoversion@dev:9
+  initialize:    julesabr/initialize@dev:4
+  dotnet:        julesabr/dotnet@dev:2
+  docfx:         julesabr/docfx@dev:1
+  nuget:         julesabr/nuget@dev:2
+  gh-pages:      sugarshin/gh-pages@1.0.1
+  auto-version:  julesabr/auto-version@dev:1
 
 workflows:
   main:
@@ -13,40 +15,70 @@ workflows:
     jobs:
       - initialize/checkout:
           repository-url: https://github.com/julesabr/Wrappers.git
-      - autoversion/init:
+          shallow-clone: no
+      - auto-version/init:
           release-branch: main
+          checkout: no
+          attach-workspace: yes
+          persist-to-workspace: yes
           requires:
             - initialize/checkout
       - dotnet/test:
           project-file: Julesabr.Wrappers.csproj
+          checkout: no
+          attach-workspace: yes
           requires:
             - initialize/checkout
       - dotnet/pack:
           lib-name: Julesabr.Wrappers
           version-file: version
           project-file: Julesabr.Wrappers.csproj
+          checkout: no
+          attach-workspace: yes
+          persist-to-workspace: yes
           requires:
-            - autoversion/init
+            - auto-version/init
+            - dotnet/test
+      - docfx/build:
+          path: docs
+          checkout: no
+          attach-workspace: yes
+          persist-to-workspace: yes
+          requires:
+            - auto-version/init
             - dotnet/test
       - approve-deploy:
           type: approval
           requires:
             - dotnet/pack
+            - docfx/build
       - nuget/deploy:
           pkg-file: bin/dotnet/pack/*.nupkg
           api-key: $NUGET_KEY
+          attach-workspace: yes
           requires:
             - approve-deploy
-      - autoversion/publish:
+      - gh-pages/deploy:
+          workspace-root: .
+          build-dir: docs/_site
+          commit-message: Documentation for $CIRCLE_SHA1 [ci skip]
+          attach-workspace: yes
+          requires:
+            - approve-deploy
+      - auto-version/publish:
+          checkout: no
+          attach-workspace: yes
           requires:
             - nuget/deploy
+            - gh-pages/deploy
   develop:
     when:
       equal: [ << pipeline.git.branch >>, develop ]
     jobs:
       - initialize/checkout:
           repository-url: https://github.com/julesabr/Wrappers.git
-      - autoversion/init:
+          shallow-clone: no
+      - auto-version/init:
           release-branch: main
           prerelease-branch: develop
           requires:
@@ -60,14 +92,14 @@ workflows:
           version-file: version
           project-file: Julesabr.Wrappers.csproj
           requires:
-            - autoversion/init
+            - auto-version/init
             - dotnet/test
       - nuget/deploy:
           pkg-file: bin/dotnet/pack/*.nupkg
           api-key: $NUGET_KEY
           requires:
             - dotnet/pack
-      - autoversion/publish:
+      - auto-version/publish:
           requires:
             - nuget/deploy
   feature:

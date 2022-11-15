@@ -1,12 +1,12 @@
 version: 2.1
 
 orbs:
-  initialize:    julesabr/initialize@dev:5
-  dotnet:        julesabr/dotnet@dev:3
-  docfx:         julesabr/docfx@dev:2
+  initialize:    julesabr/initialize@dev:6
+  dotnet:        julesabr/dotnet@dev:4
+  docfx:         julesabr/docfx@dev:3
   nuget:         julesabr/nuget@dev:2
-  gh-pages:      julesabr/gh-pages@dev:2
-  auto-version:  julesabr/auto-version@dev:2
+  gh-pages:      julesabr/gh-pages@dev:3
+  auto-version:  julesabr/auto-version@dev:3
 
 workflows:
   main:

@@ -5,7 +5,7 @@ orbs:
   dotnet:        julesabr/dotnet@dev:2
   docfx:         julesabr/docfx@dev:1
   nuget:         julesabr/nuget@dev:2
-  gh-pages:      sugarshin/gh-pages@1.0.1
+  gh-pages:      julesabr/gh-pages@dev:1
   auto-version:  julesabr/auto-version@dev:1
 
 workflows:
@@ -55,14 +55,11 @@ workflows:
       - nuget/deploy:
           pkg-file: bin/dotnet/pack/*.nupkg
           api-key: $NUGET_KEY
-          attach-workspace: yes
           requires:
             - approve-deploy
       - gh-pages/deploy:
-          workspace-root: .
-          build-dir: docs/_site
-          commit-message: Documentation for $CIRCLE_SHA1 [ci skip]
-          attach-workspace: yes
+          path: docs/_site
+          repository-url: https://github.com/julesabr/Wrappers.git
           requires:
             - approve-deploy
       - auto-version/publish:
@@ -81,16 +78,24 @@ workflows:
       - auto-version/init:
           release-branch: main
           prerelease-branch: develop
+          checkout: no
+          attach-workspace: yes
+          persist-to-workspace: yes
           requires:
             - initialize/checkout
       - dotnet/test:
           project-file: Julesabr.Wrappers.csproj
+          checkout: no
+          attach-workspace: yes
           requires:
             - initialize/checkout
       - dotnet/pack:
           lib-name: Julesabr.Wrappers
           version-file: version
           project-file: Julesabr.Wrappers.csproj
+          checkout: no
+          attach-workspace: yes
+          persist-to-workspace: yes
           requires:
             - auto-version/init
             - dotnet/test
@@ -100,6 +105,8 @@ workflows:
           requires:
             - dotnet/pack
       - auto-version/publish:
+          checkout: no
+          attach-workspace: yes
           requires:
             - nuget/deploy
   feature:
@@ -112,10 +119,14 @@ workflows:
           repository-url: https://github.com/julesabr/Wrappers.git
       - dotnet/test:
           project-file: Julesabr.Wrappers.csproj
+          checkout: no
+          attach-workspace: yes
           requires:
             - initialize/checkout
       - dotnet/pack:
           lib-name: Julesabr.Wrappers
           project-file: Julesabr.Wrappers.csproj
+          checkout: no
+          attach-workspace: yes
           requires:
             - dotnet/test

@@ -14,12 +14,9 @@ workflows:
       equal: [ << pipeline.git.branch >>, main ]
     jobs:
       - initialize/checkout:
-          repository-url: https://github.com/julesabr/Wrappers.git
           shallow-clone: no
-          add-ssh-keys: no
       - auto-version/init:
           release-branch: main
-          add-ssh-keys: no
           checkout: no
           attach-workspace: yes
           persist-to-workspace: yes
@@ -56,17 +53,13 @@ workflows:
             - docfx/build
       - nuget/deploy:
           pkg-file: bin/dotnet/pack/*.nupkg
-          api-key: $NUGET_KEY
           requires:
             - approve-deploy
       - gh-pages/deploy:
           path: docs/_site
-          repository-url: https://github.com/julesabr/Wrappers.git
-          add-ssh-keys: no
           requires:
             - approve-deploy
       - auto-version/publish:
-          add-ssh-keys: no
           checkout: no
           attach-workspace: yes
           requires:
@@ -77,13 +70,10 @@ workflows:
       equal: [ << pipeline.git.branch >>, develop ]
     jobs:
       - initialize/checkout:
-          repository-url: https://github.com/julesabr/Wrappers.git
           shallow-clone: no
-          add-ssh-keys: no
       - auto-version/init:
           release-branch: main
           prerelease-branch: develop
-          add-ssh-keys: no
           checkout: no
           attach-workspace: yes
           persist-to-workspace: yes
@@ -107,11 +97,9 @@ workflows:
             - dotnet/test
       - nuget/deploy:
           pkg-file: bin/dotnet/pack/*.nupkg
-          api-key: $NUGET_KEY
           requires:
             - dotnet/pack
       - auto-version/publish:
-          add-ssh-keys: no
           checkout: no
           attach-workspace: yes
           requires:
@@ -122,9 +110,7 @@ workflows:
         - matches: { pattern: "^feature.*$", value: "<< pipeline.git.branch >>" }
         - matches: { pattern: "^hotfix.*$", value: "<< pipeline.git.branch >>" }
     jobs:
-      - initialize/checkout:
-          repository-url: https://github.com/julesabr/Wrappers.git
-          add-ssh-keys: no
+      - initialize/checkout
       - dotnet/test:
           project-file: Julesabr.Wrappers.csproj
           checkout: no

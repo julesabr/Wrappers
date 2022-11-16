@@ -16,7 +16,6 @@ workflows:
       - initialize/checkout:
           shallow-clone: no
       - auto-version/init:
-          release-branch: main
           checkout: no
           attach-workspace: yes
           persist-to-workspace: yes
@@ -72,8 +71,7 @@ workflows:
       - initialize/checkout:
           shallow-clone: no
       - auto-version/init:
-          release-branch: main
-          prerelease-branch: develop
+          prerelease: yes
           checkout: no
           attach-workspace: yes
           persist-to-workspace: yes

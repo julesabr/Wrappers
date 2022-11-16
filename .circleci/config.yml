@@ -9,7 +9,7 @@ orbs:
   auto-version:  julesabr/auto-version@dev:3
 
 workflows:
-  main:
+  stable:
     when:
       equal: [ << pipeline.git.branch >>, main ]
     jobs:
@@ -65,9 +65,9 @@ workflows:
           requires:
             - nuget/deploy
             - gh-pages/deploy
-  develop:
+  beta:
     when:
-      equal: [ << pipeline.git.branch >>, develop ]
+      equal: [ << pipeline.git.branch >>, beta ]
     jobs:
       - initialize/checkout:
           shallow-clone: no

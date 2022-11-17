@@ -5,7 +5,7 @@
         <LangVersion>8.0</LangVersion>
         <Authors>julesabr</Authors>
         <Description>Shared classes and interfaces that wrap other libraries and APIs</Description>
-        <PackageIcon>julesabr.png</PackageIcon>
+        <PackageIcon>images\julesabr.png</PackageIcon>
         <PackageProjectUrl>https://wrappers.julesabr.dev</PackageProjectUrl>
         <RepositoryUrl>https://github.com/julesabr/Wrappers.git</RepositoryUrl>
         <PackageTags>wrapper;wrappers;reflection;julesabr</PackageTags>
@@ -18,7 +18,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <None Include="julesabr.png" Pack="true" PackagePath="" />
+        <Folder Include="images" Pack="true" PackagePath="" />
         <None Include="LICENSE" Pack="true" PackagePath="" />
         <None Include="README.md" Pack="true" PackagePath="" />
     </ItemGroup>

@@ -1,0 +1,103 @@
+version: 2.1
+
+orbs:
+  initialize:    julesabr/initialize@dev:7
+  dotnet:        julesabr/dotnet@dev:5
+  docfx:         julesabr/docfx@dev:4
+  nuget:         julesabr/nuget@dev:3
+  gh-pages:      julesabr/gh-pages@dev:4
+  auto-version:  julesabr/auto-version@dev:4
+
+workflows:
+  stable:
+    when:
+      equal: [ << pipeline.git.branch >>, main ]
+    jobs:
+      - initialize/checkout:
+          shallow-clone: no
+      - auto-version/init:
+          checkout: no
+          attach-workspace: yes
+          persist-to-workspace: yes
+          requires:
+            - initialize/checkout
+      - dotnet/pack:
+          lib-name: Julesabr.Wrappers
+          version-file: version
+          project-file: Julesabr.Wrappers.csproj
+          checkout: no
+          attach-workspace: yes
+          persist-to-workspace: yes
+          requires:
+            - auto-version/init
+      - docfx/build:
+          path: docs
+          checkout: no
+          attach-workspace: yes
+          persist-to-workspace: yes
+          requires:
+            - auto-version/init
+      - approve-deploy:
+          type: approval
+          requires:
+            - dotnet/pack
+            - docfx/build
+      - nuget/deploy:
+          pkg-file: bin/dotnet/pack/*.nupkg
+          requires:
+            - approve-deploy
+      - gh-pages/deploy:
+          path: docs/_site
+          requires:
+            - approve-deploy
+      - auto-version/publish:
+          checkout: no
+          attach-workspace: yes
+          requires:
+            - nuget/deploy
+            - gh-pages/deploy
+  beta:
+    when:
+      equal: [ << pipeline.git.branch >>, beta ]
+    jobs:
+      - initialize/checkout:
+          shallow-clone: no
+      - auto-version/init:
+          prerelease: yes
+          checkout: no
+          attach-workspace: yes
+          persist-to-workspace: yes
+          requires:
+            - initialize/checkout
+      - dotnet/pack:
+          lib-name: Julesabr.Wrappers
+          version-file: version
+          project-file: Julesabr.Wrappers.csproj
+          checkout: no
+          attach-workspace: yes
+          persist-to-workspace: yes
+          requires:
+            - auto-version/init
+      - nuget/deploy:
+          pkg-file: bin/dotnet/pack/*.nupkg
+          requires:
+            - dotnet/pack
+      - auto-version/publish:
+          checkout: no
+          attach-workspace: yes
+          requires:
+            - nuget/deploy
+  feature:
+    when:
+      or:
+        - matches: { pattern: "^feature.*$", value: "<< pipeline.git.branch >>" }
+        - matches: { pattern: "^hotfix.*$", value: "<< pipeline.git.branch >>" }
+    jobs:
+      - initialize/checkout
+      - dotnet/pack:
+          lib-name: Julesabr.Wrappers
+          project-file: Julesabr.Wrappers.csproj
+          checkout: no
+          attach-workspace: yes
+          requires:
+            - initialize/checkout

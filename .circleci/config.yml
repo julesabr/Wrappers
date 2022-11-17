@@ -4,7 +4,7 @@ orbs:
   initialize:    julesabr/initialize@dev:7
   dotnet:        julesabr/dotnet@dev:5
   docfx:         julesabr/docfx@dev:4
-  nuget:         julesabr/nuget@dev:2
+  nuget:         julesabr/nuget@dev:3
   gh-pages:      julesabr/gh-pages@dev:4
   auto-version:  julesabr/auto-version@dev:4
 
@@ -21,12 +21,6 @@ workflows:
           persist-to-workspace: yes
           requires:
             - initialize/checkout
-      - dotnet/test:
-          project-file: Julesabr.Wrappers.csproj
-          checkout: no
-          attach-workspace: yes
-          requires:
-            - initialize/checkout
       - dotnet/pack:
           lib-name: Julesabr.Wrappers
           version-file: version
@@ -36,7 +30,6 @@ workflows:
           persist-to-workspace: yes
           requires:
             - auto-version/init
-            - dotnet/test
       - docfx/build:
           path: docs
           checkout: no
@@ -44,7 +37,6 @@ workflows:
           persist-to-workspace: yes
           requires:
             - auto-version/init
-            - dotnet/test
       - approve-deploy:
           type: approval
           requires:
@@ -77,12 +69,6 @@ workflows:
           persist-to-workspace: yes
           requires:
             - initialize/checkout
-      - dotnet/test:
-          project-file: Julesabr.Wrappers.csproj
-          checkout: no
-          attach-workspace: yes
-          requires:
-            - initialize/checkout
       - dotnet/pack:
           lib-name: Julesabr.Wrappers
           version-file: version
@@ -92,7 +78,6 @@ workflows:
           persist-to-workspace: yes
           requires:
             - auto-version/init
-            - dotnet/test
       - nuget/deploy:
           pkg-file: bin/dotnet/pack/*.nupkg
           requires:
@@ -109,16 +94,10 @@ workflows:
         - matches: { pattern: "^hotfix.*$", value: "<< pipeline.git.branch >>" }
     jobs:
       - initialize/checkout
-      - dotnet/test:
-          project-file: Julesabr.Wrappers.csproj
-          checkout: no
-          attach-workspace: yes
-          requires:
-            - initialize/checkout
       - dotnet/pack:
           lib-name: Julesabr.Wrappers
           project-file: Julesabr.Wrappers.csproj
           checkout: no
           attach-workspace: yes
           requires:
-            - dotnet/test
+            - initialize/checkout

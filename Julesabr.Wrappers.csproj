@@ -18,7 +18,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <Folder Include="images" Pack="true" PackagePath="" />
+        <None Include="images/*" Pack="true" PackagePath="images" />
         <None Include="LICENSE" Pack="true" PackagePath="" />
         <None Include="README.md" Pack="true" PackagePath="" />
     </ItemGroup>

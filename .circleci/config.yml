@@ -33,7 +33,7 @@ workflows:
           attach-workspace: yes
           persist-to-workspace: yes
           requires:
-            - auto-version/init
+            - initialize/checkout
 #      - approve-deploy:
 #          type: approval
 #          requires:
@@ -46,7 +46,7 @@ workflows:
       - gh-pages/deploy:
           path: docs/_site
           requires:
-            - approve-deploy
+            - docfx/build
 #      - auto-version/publish:
 #          checkout: no
 #          attach-workspace: yes

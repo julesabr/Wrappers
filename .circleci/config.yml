@@ -1,12 +1,12 @@
 version: 2.1
 
 orbs:
-  initialize:    julesabr/initialize@dev:7
-  dotnet:        julesabr/dotnet@dev:5
-  docfx:         julesabr/docfx@dev:4
-  nuget:         julesabr/nuget@dev:3
-  gh-pages:      julesabr/gh-pages@dev:6
-  auto-version:  julesabr/auto-version@dev:4
+  initialize:    julesabr/initialize@1.0
+  dotnet:        julesabr/dotnet@1.0
+  docfx:         julesabr/docfx@1.0
+  nuget:         julesabr/nuget@1.0
+  gh-pages:      julesabr/gh-pages@1.0
+  auto-version:  julesabr/auto-version@1.0
 
 workflows:
   stable:
@@ -23,8 +23,9 @@ workflows:
             - initialize/checkout
       - dotnet/pack:
           lib-name: Julesabr.Wrappers
-          version-file: version
           project-file: Julesabr.Wrappers.csproj
+          version-file: version
+          configuration: Release
           checkout: no
           attach-workspace: yes
           persist-to-workspace: yes
@@ -71,8 +72,8 @@ workflows:
             - initialize/checkout
       - dotnet/pack:
           lib-name: Julesabr.Wrappers
-          version-file: version
           project-file: Julesabr.Wrappers.csproj
+          version-file: version
           checkout: no
           attach-workspace: yes
           persist-to-workspace: yes
